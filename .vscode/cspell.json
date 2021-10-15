@@ -1,0 +1,212 @@
+{
+    "language": "en-GB,en-US,en",
+    "enabledLanguageIds": [
+        "Log",
+        "asciidoc",
+        "aspnetcorerazor",
+        "bat",
+        "bibtex",
+        "bibtex-style",
+        "c",
+        "chef_metadata",
+        "clojure",
+        "coffeescript",
+        "cpp",
+        "csharp",
+        "css",
+        "diff",
+        "dockerfile",
+        "doctex",
+        "fsharp",
+        "git-commit",
+        "git-rebase",
+        "go",
+        "groovy",
+        "handlebars",
+        "haskell",
+        "hlsl",
+        "html",
+        "ignore",
+        "ini",
+        "jade",
+        "java",
+        "javascript",
+        "javascriptreact",
+        "json",
+        "jsonc",
+        "jsx-tags",
+        "latex",
+        "latex-expl3",
+        "less",
+        "log",
+        "lua",
+        "makefile",
+        "markdown",
+        "objective-c",
+        "objective-cpp",
+        "perl",
+        "php",
+        "plaintext",
+        "powershell",
+        "properties",
+        "pug",
+        "python",
+        "r",
+        "razor",
+        "restructuredtext",
+        "rsweave",
+        "ruby",
+        "rust",
+        "scala",
+        "scss",
+        "shellscript",
+        "sql",
+        "swift",
+        "tex",
+        "text",
+        "typescript",
+        "typescriptreact",
+        "vb",
+        "xml",
+        "xsl",
+        "yaml",
+        "yml"
+    ],
+    "ignorePaths": [
+        "**/node_modules/**",
+        "**/vscode-extension/**",
+        "**/.git/**",
+        ".vscode/**",
+        "**/*.dic",
+        "**/*.aff"
+    ],
+    "dictionaryDefinitions": [],
+    "dictionaries": [
+        "softwareTerms"
+    ],
+    "languageSettings": [
+        {
+            "languageId": "markdown",
+            "dictionaries": [
+                "powershell"
+            ]
+        },
+        {
+            "languageId": "powershell",
+            "dictionaries": [
+                "powershell"
+            ]
+        },
+        {
+            "languageId": "*",
+            "local": "en",
+            "dictionaries": [
+                "wordsEn"
+            ]
+        },
+        {
+            "languageId": "*",
+            "local": "en-US",
+            "dictionaries": [
+                "wordsEn"
+            ]
+        },
+        {
+            "languageId": "*",
+            "local": "en-GB",
+            "dictionaries": [
+                "wordsEnGb"
+            ]
+        },
+        {
+            "languageId": "*",
+            "dictionaries": [
+                "companies",
+                "softwareTerms",
+                "misc"
+            ]
+        },
+        {
+            "languageId": "python",
+            "allowCompoundWords": true,
+            "dictionaries": [
+                "python"
+            ]
+        },
+        {
+            "languageId": "go",
+            "allowCompoundWords": true,
+            "dictionaries": [
+                "go"
+            ]
+        },
+        {
+            "languageId": "javascript",
+            "dictionaries": [
+                "typescript",
+                "node"
+            ]
+        },
+        {
+            "languageId": "javascriptreact",
+            "dictionaries": [
+                "typescript",
+                "node"
+            ]
+        },
+        {
+            "languageId": "typescript",
+            "dictionaries": [
+                "typescript",
+                "node"
+            ]
+        },
+        {
+            "languageId": "typescriptreact",
+            "dictionaries": [
+                "typescript",
+                "node"
+            ]
+        },
+        {
+            "languageId": "html",
+            "dictionaries": [
+                "html",
+                "fonts",
+                "typescript",
+                "css"
+            ]
+        },
+        {
+            "languageId": "php",
+            "dictionaries": [
+                "php",
+                "html",
+                "fonts",
+                "css",
+                "typescript"
+            ]
+        },
+        {
+            "languageId": "css",
+            "dictionaries": [
+                "fonts",
+                "css"
+            ]
+        },
+        {
+            "languageId": "less",
+            "dictionaries": [
+                "fonts",
+                "css"
+            ]
+        },
+        {
+            "languageId": "scss",
+            "dictionaries": [
+                "fonts",
+                "css"
+            ]
+        }
+    ]
+}

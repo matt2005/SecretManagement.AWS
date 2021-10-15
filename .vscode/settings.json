@@ -1,0 +1,40 @@
+{
+	"files.trimTrailingWhitespace": true,
+	"files.associations": {
+		"Jenkinsfile": "groovy"
+	},
+	"powershell.scriptAnalysis.settingsPath": ".vscode\\PSScriptAnalyzerSettings.psd1",
+	"better-comments.multilineComments": true,
+	"files.autoSave": "off",
+	"editor.rulers": [
+		120
+	],
+	"files.defaultLanguage": "powershell",
+	"powershell.startAutomatically": true,
+	"powershell.codeFormatting.openBraceOnSameLine": false,
+	"editor.formatOnSave": true,
+	"editor.formatOnType": true,
+	"powershell.integratedConsole.focusConsoleOnExecute": false,
+	"files.encoding": "utf8bom",
+	"[powershell]": {
+		"files.encoding": "utf8bom",
+		"files.autoGuessEncoding": true,
+		"editor.autoClosingBrackets": "never"
+	},
+	"[groovy]": {
+		"files.encoding": "utf8bom",
+		"files.autoGuessEncoding": true
+	},
+	"spellright.language": [
+		"en"
+	],
+	"spellright.documentTypes": [],
+	"spellright.notificationClass": "warning",
+	"powershell.powerShellAdditionalExePaths": [
+		{
+			"exePath": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+			"versionName": "PowerShell 7"
+		}
+	],
+	"powershell.powerShellDefaultVersion": "PowerShell 7"
+}

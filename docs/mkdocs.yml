@@ -1,0 +1,13 @@
+site_name: SecretManagement.AWS Documentation
+repo_url: https://github.com/matt2005/SecretManagement.AWS
+site_author: Matthew Hilton
+edit_uri: edit/master/docs/
+theme: readthedocs
+copyright: ""
+pages:
+  - Home: index.md
+  - Release Notes: RELEASE.md
+  - Change Log: ChangeLog.md
+  - Functions:
+
+

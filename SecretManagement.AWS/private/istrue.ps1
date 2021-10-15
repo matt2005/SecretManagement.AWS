@@ -1,0 +1,4 @@
+﻿Function isTrue
+{
+    return $True
+}
