@@ -1,11 +1,5 @@
 ﻿using Namespace Microsoft.PowerShell.SecretManagement
 
-enum SecretManagementAWSVaultType
-{
-    SSMParameterStore = 0
-    SecretsManagement = 1
-}
-
 class SecretManagementAWS
 {
     [Microsoft.PowerShell.SecretManagement.SecretVaultInfo]$Vault
@@ -30,6 +24,11 @@ class SecretManagementAWS
     }
     [Microsoft.PowerShell.SecretManagement.SecretInformation]GetSecretInfo([string]$Name, [string]$VaultName)
     {
+        $ParameterList = @{
+            Name      = $Name
+            VaultName = $VaultName
+        }
+        $InvokeOutput = $this.InvokeCmdlet('GetSecretInfo', $ParameterList)
         $Secret = '' # placeholder
         $secretType = $This.GetSecretType($Secret)
         $metaData = @{}
@@ -44,6 +43,13 @@ class SecretManagementAWS
     }
     [boolean]SetSecret([string]$Name, [string]$VaultName, [System.Object]$Secret)
     {
+        $ParameterList = @{
+            Name       = $Name
+            VaultName  = $VaultName
+            Secret     = $Secret
+            SecretType = $This.GetSecretType($Secret)
+        }
+        $InvokeOutput = $this.InvokeCmdlet('SetSecret', $ParameterList)
         $Success = $false
         Return $Success
     }
@@ -55,6 +61,12 @@ class SecretManagementAWS
     }
     [boolean]SetSecretInfo([string]$Name, [string]$VaultName, [Hashtable]$metaData)
     {
+        $ParameterList = @{
+            Name      = $Name
+            VaultName = $VaultName
+            MetaData  = $metaData
+        }
+        $InvokeOutput = $this.InvokeCmdlet('SetSecretInfo', $ParameterList)
         $Success = $false
         Return $Success
     }
@@ -66,6 +78,11 @@ class SecretManagementAWS
     }
     [boolean]RemoveSecret([string]$Name, [string]$VaultName)
     {
+        $ParameterList = @{
+            Name      = $Name
+            VaultName = $VaultName
+        }
+        $InvokeOutput = $this.InvokeCmdlet('RemoveSecret', $ParameterList)
         $Success = $false
         Return $Success
     }
@@ -76,6 +93,10 @@ class SecretManagementAWS
     }
     [boolean]TestSecretVault([string]$VaultName)
     {
+        $ParameterList = @{
+            VaultName = $this.Vault.Name
+        }
+        $InvokeOutput = $this.InvokeCmdlet('TestSecretVault', $ParameterList)
         $Success = $false
         Return $Success
     }
@@ -117,66 +138,106 @@ class SecretManagementAWS
         $VaultParameters = $this.Vault.VaultParameters
         return $VaultParameters
     }
+    [System.Object]InvokeCmdlet([string]$FunctionCall, [hashtable]$ParameterList)
+    {
+        $Output = [System.Object]::new()
+        $AdditionalParameters = $this.GetSecretVaultParameters($this.Vault)
+        $VaultPath = $AdditionalParameters['VaultPath']
+        $SpecificParameters = @{        }
+        $ParameterBasePath = ('{0}/{1}' -f $VaultPath, $ParameterList.Name)
+        Function DummyGet
+        {
+            param(
+                [string]$Name
+            )
+            $Username = $Name
+            $Password = $Name  | ConvertTo-SecureString -asPlainText -Force
+            $Output = New-Object System.Management.Automation.PSCredential($Username, $Password)
+            return $Output
+        }
+        Function DummySet
+        {
+            param(
+                [string]$Name,
+                [pscredential]$Value
+            )
+            $Output = $true
+            return $Output
+        }
+        Function DummyRemove
+        {
+            param(
+                [string]$Name
+            )
+            $Output = $true
+            return $Output
+        }
+        Function DummyTestSecretVault
+        {
+            param(
+                [string]$Name
+            )
+            $Output = $true
+            return $Output
+        }
+
+        switch -regex ($FunctionCall)
+        {
+            '^SetSecret$'
+            {
+                Switch ($ParameterList.SecretType)
+                {
+                    [Microsoft.PowerShell.SecretManagement.SecretType]::PSCredential
+                    {
+                        $SetParam = @{
+                            Name  = ('{0}' -f $ParameterBasePath)
+                            Value = $ParameterList.Secret
+                        }
+                        $Output = DummySet @SpecificParameters @SetParam
+                    }
+                }
+            }
+            '^GetSecretInfo$'
+            {
+                Switch ($ParameterList.SecretType)
+                {
+                    [Microsoft.PowerShell.SecretManagement.SecretType]::PSCredential
+                    {
+                        $GetParam = @{
+                            Name = ('{0}' -f $ParameterBasePath)
+                        }
+                        $Output = (DummyGet @SpecificParameters @GetParam)
+                    }
+                }
+            }
+            '^Remove'
+            {
+                Switch ($ParameterList.SecretType)
+                {
+                    [Microsoft.PowerShell.SecretManagement.SecretType]::PSCredential
+                    {
+                        $RemoveParam = @{
+                            Name = ('{0}' -f $ParameterBasePath)
+                        }
+                        $Output = DummyRemove @SpecificParameters @RemoveParam
+                    }
+                }
+            }
+            '^TestSecretVault$'
+            {
+                $TestSecretVaultParam = @{
+                    Name = ('{0}' -f $ParameterBasePath)
+                }
+                $Output = DummyTestSecretVault @SpecificParameters @TestSecretVaultParam
+            }
+        }
+        return $Output
+    }
 }
 
 class SecretManagementAWSParameterStore : SecretManagementAWS
 {
-    [Microsoft.PowerShell.SecretManagement.SecretInformation]GetSecretInfo([string]$Name, [string]$VaultName)
-    {
-        $ParameterList = @{
-            Name      = $Name
-            VaultName = $VaultName
-        }
-        $InvokeOutput = $this.InvokeSSMCmdlet('GetSecretInfo', $ParameterList)
-        $Secret = '' # placeholder
-        $secretType = $This.GetSecretType($Secret)
-        $metaData = @{}
-        $secretInfo = [Microsoft.PowerShell.SecretManagement.SecretInformation]::new($name, $secretType, $VaultName, $metaData)
-        return $secretInfo
-    }
-    [boolean]SetSecret([string]$Name, [string]$VaultName, [System.Object]$Secret)
-    {
-        $ParameterList = @{
-            Name       = $Name
-            VaultName  = $VaultName
-            Secret     = $Secret
-            SecretType = $This.GetSecretType($Secret)
-        }
-        $InvokeOutput = $this.InvokeSSMCmdlet('SetSecret', $ParameterList)
-        $Success = $false
-        Return $Success
-    }
-    [boolean]SetSecretInfo([string]$Name, [string]$VaultName, [Hashtable]$metaData)
-    {
-        $ParameterList = @{
-            Name      = $Name
-            VaultName = $VaultName
-            MetaData  = $metaData
-        }
-        $InvokeOutput = $this.InvokeSSMCmdlet('SetSecretInfo', $ParameterList)
-        $Success = $false
-        Return $Success
-    }
-    [boolean]RemoveSecret([string]$Name, [string]$VaultName)
-    {
-        $ParameterList = @{
-            Name      = $Name
-            VaultName = $VaultName
-        }
-        $InvokeOutput = $this.InvokeSSMCmdlet('RemoveSecret', $ParameterList)
-        $Success = $false
-        Return $Success
-    }
-    [boolean]TestSecretVault()
-    {
-        $ParameterList = @{
-            VaultName = $this.Vault.Name
-        }
-        $InvokeOutput = $this.InvokeSSMCmdlet('TestSecretVault', $ParameterList)
-        $Success = $false
-        Return $Success
-    }
-    [System.Object]InvokeSSMCmdlet([string]$FunctionCall, [hashtable]$ParameterList)
+    [System.Object]InvokeCmdlet([string]$FunctionCall, [hashtable]$ParameterList)
     {
         $Output = [System.Object]::new()
         $AdditionalParameters = $this.GetSecretVaultParameters($this.Vault)
